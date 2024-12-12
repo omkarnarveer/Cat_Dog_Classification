@@ -42,7 +42,7 @@ Cat_Dog_Classification/
 
 **##Setup Instructions**
 - Clone the Repository:
-- git clone https://github.com/your-repo/Cat_Dog_Classification.git
+- git clone https://github.com/omkarnarveer/Cat_Dog_Classification.git
 - cd Cat_Dog_Classification
 - Install Dependencies: Ensure you have Python installed, then install the required libraries:
 - pip install -r requirements.txt
