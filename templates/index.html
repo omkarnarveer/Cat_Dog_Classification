@@ -31,6 +31,7 @@
                     <button type="submit" class="btn btn-primary btn-block mt-4">Predict</button>
                 </form>
                 <div id="result" class="mt-4" style="display: none;">
+                    <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid mb-3" style="max-width: 100%; border: 1px solid #ccc; border-radius: 10px;">
                     <div class="alert alert-info" role="alert"></div>
                 </div>
             </div>
@@ -45,6 +46,14 @@
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+            // Preview the selected image before submission
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#uploadedImage").attr("src", e.target.result).show();
+                $("#result").hide(); // Hide result until form submission
+            };
+            reader.readAsDataURL(this.files[0]);
         });
 
         // AJAX form submission
@@ -61,11 +70,15 @@
                 processData: false,
                 success: function (response) {
                     $("#result").show(); // Show the result div
-                    $("#result .alert").text(response); // Display the response in the alert
+                    if (response.error) {
+                        $("#result .alert").removeClass("alert-info").addClass("alert-danger").text(response.error);
+                    } else {
+                        $("#result .alert").removeClass("alert-danger").addClass("alert-info").text("Prediction: " + response.result);
+                    }
                 },
                 error: function (xhr) {
                     $("#result").show();
-                    $("#result .alert").text("An error occurred: " + xhr.responseText);
+                    $("#result .alert").removeClass("alert-info").addClass("alert-danger").text("An error occurred: " + xhr.responseText);
                 }
             });
         });
